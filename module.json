@@ -1,0 +1,20 @@
+{
+  "id": "hh-fvtt-1password",
+  "title": "1Password Fixes",
+  "description": "Stops 1Password from offering to fill Foundry VTT's text fields, such as the name box in the Create Actor and Create Item dialogs.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Rhett D. Hudson"
+    }
+  ],
+  "license": "LICENSE",
+  "readme": "README.md",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "14"
+  },
+  "esmodules": [
+    "scripts/module.js"
+  ]
+}
