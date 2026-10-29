@@ -9,6 +9,14 @@
   "scripts": {
     "test": "node --test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ImproperSubset/hh-fvtt-password-managers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ImproperSubset/hh-fvtt-password-managers/issues"
+  },
+  "homepage": "https://github.com/ImproperSubset/hh-fvtt-password-managers#readme",
   "devDependencies": {
     "jsdom": "^26.1.0"
   }

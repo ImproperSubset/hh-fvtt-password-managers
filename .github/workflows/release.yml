@@ -1,0 +1,44 @@
+name: Release
+on:
+  release:
+    types:
+      - published
+permissions:
+  contents: read
+jobs:
+  check:
+    uses: ./.github/workflows/ci.yml
+  release:
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.release.tag_name }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check the tag matches the version
+        run: |
+          for file in module.json package.json; do
+            version=$(jq -r .version "$file")
+            if [ "$version" != "$TAG" ]; then
+              echo "::error file=$file::version $version does not match release tag $TAG"
+              exit 1
+            fi
+          done
+      - name: Package
+        env:
+          DOWNLOAD: https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.zip
+        run: |
+          id=$(jq -r .id module.json)
+          folder="$RUNNER_TEMP/package/$id"
+          mkdir -p "$folder"
+          cp -r LICENSE README.md scripts "$folder/"
+          jq --arg download "$DOWNLOAD" '.download = $download' module.json > "$RUNNER_TEMP/module.json"
+          cp "$RUNNER_TEMP/module.json" "$folder/module.json"
+          cd "$RUNNER_TEMP/package"
+          zip -r "$RUNNER_TEMP/module.zip" "$id"
+      - name: Upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$TAG" "$RUNNER_TEMP/module.json" "$RUNNER_TEMP/module.zip" --clobber

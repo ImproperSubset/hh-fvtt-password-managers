@@ -8,6 +8,9 @@
       "name": "Rhett D. Hudson"
     }
   ],
+  "url": "https://github.com/ImproperSubset/hh-fvtt-password-managers",
+  "manifest": "https://github.com/ImproperSubset/hh-fvtt-password-managers/releases/latest/download/module.json",
+  "bugs": "https://github.com/ImproperSubset/hh-fvtt-password-managers/issues",
   "license": "LICENSE",
   "readme": "README.md",
   "compatibility": {
