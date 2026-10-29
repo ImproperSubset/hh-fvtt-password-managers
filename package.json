@@ -1,5 +1,5 @@
 {
-  "name": "hh-fvtt-1password",
+  "name": "hh-fvtt-password-managers",
   "version": "0.1.0",
   "private": true,
   "description": "Stops password managers from offering to fill Foundry VTT's text fields.",

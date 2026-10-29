@@ -25,4 +25,4 @@ npm install
 npm test   # node:test with jsdom
 ```
 
-To try it, copy or link this folder into `Data/modules/hh-fvtt-1password` and enable it in a world.
+To try it, copy or link this folder into `Data/modules/hh-fvtt-password-managers` and enable it in a world.

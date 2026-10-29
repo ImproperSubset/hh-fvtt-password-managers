@@ -1,5 +1,5 @@
 {
-  "id": "hh-fvtt-1password",
+  "id": "hh-fvtt-password-managers",
   "title": "Password Manager Fixes",
   "description": "Stops password managers from offering to fill Foundry VTT's text fields, such as the name box in the Create Actor and Create Item dialogs.",
   "version": "0.1.0",
