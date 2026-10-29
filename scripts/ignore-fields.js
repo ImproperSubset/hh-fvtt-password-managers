@@ -1,15 +1,26 @@
 /**
- * Marks fields so 1Password leaves them alone.
- * https://www.1password.dev/web/compatible-website-design/
+ * Marks fields so password managers leave them alone.
  */
 
-export const IGNORE_ATTRIBUTE = 'data-1p-ignore'
+/** Each password manager's ignore attribute and the value it expects. */
+export const IGNORE_ATTRIBUTES = {
+  // https://www.1password.dev/web/compatible-website-design/
+  'data-1p-ignore': '',
+  // Honored only when the user enables "Allow websites to exclude fields to autofill".
+  'data-bwignore': '',
+  // https://support.dashlane.com/hc/articles/4420122792594
+  'data-form-type': 'other',
+  // https://support.lastpass.com/s/document-item?language=en_US&bundleId=lastpass&topicId=LastPass/c_lp_prevent_fields_from_being_filled_automatically.html&_LANG=enus
+  'data-lpignore': 'true',
+  // Read by attrIgnored in @protontech/autofill.
+  'data-protonpass-ignore': ''
+}
 
-// Password fields stay unmarked so 1Password can still fill a real secret.
+// Password fields stay unmarked so a password manager can still fill a real secret.
 const FIELD_SELECTOR = 'input:not([type="password"]):not([type="hidden"]), textarea'
 
 /**
- * Adds the ignore attribute to every matching field in root, root included.
+ * Adds the ignore attributes to every matching field in root, root included.
  * @param {Element|Document} root
  * @returns {number} how many fields were newly marked
  */
@@ -18,11 +29,25 @@ export function markFields (root) {
   if (root.matches?.(FIELD_SELECTOR)) fields.push(root)
   let marked = 0
   for (const field of fields) {
-    if (field.hasAttribute(IGNORE_ATTRIBUTE)) continue
-    field.setAttribute(IGNORE_ATTRIBUTE, '')
-    marked++
+    let changed = false
+    for (const [name, value] of Object.entries(IGNORE_ATTRIBUTES)) {
+      if (field.hasAttribute(name)) continue
+      field.setAttribute(name, value)
+      changed = true
+    }
+    if (changed) marked++
   }
   return marked
+}
+
+/**
+ * Removes the ignore attributes from a field, keeping any the page set to another value.
+ * @param {Element} field
+ */
+function unmarkField (field) {
+  for (const [name, value] of Object.entries(IGNORE_ATTRIBUTES)) {
+    if (field.getAttribute(name) === value) field.removeAttribute(name)
+  }
 }
 
 /**
@@ -37,7 +62,7 @@ export function watchFields (root) {
     for (const record of records) {
       if (record.type === 'attributes') {
         const field = record.target
-        if (field.getAttribute('type') === 'password') field.removeAttribute(IGNORE_ATTRIBUTE)
+        if (field.getAttribute('type') === 'password') unmarkField(field)
         else markFields(field)
         continue
       }
